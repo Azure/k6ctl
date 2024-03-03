@@ -1,0 +1,3 @@
+# excluding the workspace sum file to avoid noise, the actual checking is done in the go.sum
+# We keep go.work to simplify the setup
+go.work.sum

@@ -1,0 +1,7 @@
+name: demo
+files:
+- source: run.js
+  dest: run.js
+k6:
+  namespace: default
+  image: ghcr.io/grafana/k6@sha256:8cd78f9d0de5f50bc8821cceecf356d5d9e839e6611c226a3fcf13c591080fbd

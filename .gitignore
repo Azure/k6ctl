@@ -8,6 +8,10 @@
 *.so
 *.dylib
 
+# IDE configurations
+.idea
+.vscode
+
 # Test binary, built with `go test -c`
 *.test
 
@@ -18,4 +22,8 @@
 # vendor/
 
 # Go workspace file
-go.work
+/go.work
+/go.work.sum
+
+bin/
+kubeconfig-*
