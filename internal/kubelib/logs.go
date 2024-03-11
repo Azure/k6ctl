@@ -101,6 +101,12 @@ func (f *logsFollower) isNewTarget(target k8scorev1.ObjectReference) bool {
 	return true
 }
 
+var logsAblePodPhase = map[k8scorev1.PodPhase]struct{}{
+	k8scorev1.PodRunning:   {},
+	k8scorev1.PodFailed:    {},
+	k8scorev1.PodSucceeded: {},
+}
+
 func (f *logsFollower) discoverPods(ctx context.Context) {
 	defer f.wg.Done()
 
@@ -116,7 +122,7 @@ func (f *logsFollower) discoverPods(ctx context.Context) {
 			return false
 		}
 
-		if pod.Status.Phase != k8scorev1.PodRunning {
+		if _, ok := logsAblePodPhase[pod.Status.Phase]; !ok {
 			return false
 		}
 
