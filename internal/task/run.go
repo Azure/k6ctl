@@ -21,9 +21,12 @@ const (
 	labelKeyTaskName     = "k6ctl/task"
 	scriptsVolumeName    = "k6-scripts"
 	containerScriptsPath = "/scripts"
+	containerNameRunner  = "k6-runner"
 )
 
 type runTaskOption struct {
+	// FollowLogs specifies whether to follow the logs of the task.
+	FollowLogs bool
 	// KubeClientFactory provides the kubernetes client to use for the task.
 	// If not provided, createKubeClientFromKubeConfig is used.
 	// Unit test can provide a mock implementation.
@@ -32,6 +35,7 @@ type runTaskOption struct {
 
 func defaultRunTaskOption() *runTaskOption {
 	return &runTaskOption{
+		FollowLogs:        true,
 		KubeClientFactory: kubelib.CreateKubeClientFromKubeConfig,
 	}
 }
@@ -80,6 +84,7 @@ func RunTask(
 	tr := &taskRunner{
 		target:                  target,
 		kubeClient:              kubeClient,
+		followLogs:              opt.FollowLogs,
 		getConfigProviderByName: getConfigProviderByName,
 		taskConfig:              taskConfig,
 		sourceBaseDir:           sourceBaseDir,
@@ -92,6 +97,7 @@ func RunTask(
 type taskRunner struct {
 	target     target.Target
 	kubeClient kubernetes.Interface
+	followLogs bool
 
 	getConfigProviderByName config.GetConfigProviderByName
 	taskConfig              *Schema
@@ -177,6 +183,10 @@ func (tr *taskRunner) Run(ctx context.Context) error {
 		if err != nil {
 			return fmt.Errorf("failed to create job %q: %w", job.Name, err)
 		}
+	}
+
+	if tr.followLogs {
+		return tr.followJobLogs(ctx, jobObject)
 	}
 
 	return nil
