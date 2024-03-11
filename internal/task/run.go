@@ -13,6 +13,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 
 	"github.com/Azure/k6ctl/internal/config"
+	"github.com/Azure/k6ctl/internal/kubelib"
 	"github.com/Azure/k6ctl/internal/target"
 )
 
@@ -23,12 +24,15 @@ const (
 )
 
 type runTaskOption struct {
-	KubeClientFactory func(kubeconfig string) (kubernetes.Interface, error)
+	// KubeClientFactory provides the kubernetes client to use for the task.
+	// If not provided, createKubeClientFromKubeConfig is used.
+	// Unit test can provide a mock implementation.
+	KubeClientFactory kubelib.KubeClientFactory
 }
 
 func defaultRunTaskOption() *runTaskOption {
 	return &runTaskOption{
-		KubeClientFactory: createKubeClientFromKubeConfig,
+		KubeClientFactory: kubelib.CreateKubeClientFromKubeConfig,
 	}
 }
 
