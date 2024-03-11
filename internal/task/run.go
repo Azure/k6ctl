@@ -16,32 +16,6 @@ import (
 	"github.com/Azure/k6ctl/internal/target"
 )
 
-const (
-	labelKeyTaskName     = "k6ctl/task"
-	scriptsVolumeName    = "k6-scripts"
-	containerScriptsPath = "/scripts"
-)
-
-type runTaskOption struct {
-	KubeClientFactory func(kubeconfig string) (kubernetes.Interface, error)
-}
-
-func defaultRunTaskOption() *runTaskOption {
-	return &runTaskOption{
-		KubeClientFactory: createKubeClientFromKubeConfig,
-	}
-}
-
-type RunTaskOption interface {
-	apply(option *runTaskOption) error
-}
-
-type applyRunTaskOptionFunc func(option *runTaskOption) error
-
-func (f applyRunTaskOptionFunc) apply(option *runTaskOption) error {
-	return f(option)
-}
-
 func RunTask(
 	ctx context.Context,
 	target target.Target,
@@ -76,6 +50,7 @@ func RunTask(
 	tr := &taskRunner{
 		target:                  target,
 		kubeClient:              kubeClient,
+		followLogs:              opt.FollowLogs,
 		getConfigProviderByName: getConfigProviderByName,
 		taskConfig:              taskConfig,
 		sourceBaseDir:           sourceBaseDir,
@@ -88,6 +63,7 @@ func RunTask(
 type taskRunner struct {
 	target     target.Target
 	kubeClient kubernetes.Interface
+	followLogs bool
 
 	getConfigProviderByName config.GetConfigProviderByName
 	taskConfig              *Schema
@@ -173,6 +149,10 @@ func (tr *taskRunner) Run(ctx context.Context) error {
 		if err != nil {
 			return fmt.Errorf("failed to create job %q: %w", job.Name, err)
 		}
+	}
+
+	if tr.followLogs {
+		return tr.followJobLogs(ctx, jobObject)
 	}
 
 	return nil
