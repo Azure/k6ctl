@@ -3,9 +3,10 @@ package plugin
 import (
 	"context"
 	"fmt"
-	"os"
+	"io"
 	"os/exec"
 
+	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
 
 	"github.com/Azure/k6ctl/internal/config"
@@ -83,15 +84,24 @@ func registerFromClientBinary(
 		return errOut(err)
 	}
 
+	// TODO: move to ui package
+	logger := hclog.New(&hclog.LoggerOptions{
+		Name:   "k6ctl",
+		Level:  hclog.Error,
+		Output: io.Discard,
+	})
+
 	pluginClient := plugin.NewClient(
 		&plugin.ClientConfig{
-			Stderr:          os.Stderr,
+			// TODO: move to ui package
+			// Stderr:          os.Stderr,
 			HandshakeConfig: handshakeConfig,
 			Plugins: map[string]plugin.Plugin{
 				pluginName: &Plugin{},
 			},
 			Cmd:              exec.CommandContext(ctx, settings.Path),
 			AllowedProtocols: []plugin.Protocol{plugin.ProtocolNetRPC},
+			Logger:           logger,
 		},
 	)
 

@@ -6,6 +6,7 @@ require (
 	github.com/alecthomas/kong v0.8.1
 	github.com/go-playground/validator/v10 v10.19.0
 	github.com/goccy/go-yaml v1.11.3
+	github.com/hashicorp/go-hclog v0.14.1
 	github.com/hashicorp/go-plugin v1.6.0
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/sourcegraph/conc v0.3.0
@@ -32,7 +33,6 @@ require (
 	github.com/google/gnostic-models v0.6.8 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
-	github.com/hashicorp/go-hclog v0.14.1 // indirect
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/imdario/mergo v0.3.6 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
