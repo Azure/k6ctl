@@ -13,42 +13,8 @@ import (
 	"k8s.io/client-go/kubernetes"
 
 	"github.com/Azure/k6ctl/internal/config"
-	"github.com/Azure/k6ctl/internal/kubelib"
 	"github.com/Azure/k6ctl/internal/target"
 )
-
-const (
-	labelKeyTaskName     = "k6ctl/task"
-	scriptsVolumeName    = "k6-scripts"
-	containerScriptsPath = "/scripts"
-	containerNameRunner  = "k6-runner"
-)
-
-type runTaskOption struct {
-	// FollowLogs specifies whether to follow the logs of the task.
-	FollowLogs bool
-	// KubeClientFactory provides the kubernetes client to use for the task.
-	// If not provided, createKubeClientFromKubeConfig is used.
-	// Unit test can provide a mock implementation.
-	KubeClientFactory kubelib.KubeClientFactory
-}
-
-func defaultRunTaskOption() *runTaskOption {
-	return &runTaskOption{
-		FollowLogs:        true,
-		KubeClientFactory: kubelib.CreateKubeClientFromKubeConfig,
-	}
-}
-
-type RunTaskOption interface {
-	apply(option *runTaskOption) error
-}
-
-type applyRunTaskOptionFunc func(option *runTaskOption) error
-
-func (f applyRunTaskOptionFunc) apply(option *runTaskOption) error {
-	return f(option)
-}
 
 func RunTask(
 	ctx context.Context,

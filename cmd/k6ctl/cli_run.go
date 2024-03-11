@@ -10,10 +10,11 @@ import (
 )
 
 type CLIRun struct {
-	Kubeconfig string `required:"" type:"existingfile" env:"KUBECONFIG" long:"kubeconfig" description:"Path to the kubeconfig file to use for CLI requests"`
-	TaskConfig string `required:"" default:"k6ctl.yaml" type:"existingfile" short:"c" long:"config" description:"Path to the task config file to use for CLI requests"`
-	BaseDir    string `required:"" default:"." type:"existingdir" short:"d" long:"base-dir" description:"Base directory to use for relative paths"`
-	Script     string `arg:"" default:"script.js" description:"Script to run"`
+	Kubeconfig   string `required:"" type:"existingfile" env:"KUBECONFIG" long:"kubeconfig" help:"Path to the kubeconfig file to use for CLI requests"`
+	TaskConfig   string `required:"" default:"k6ctl.yaml" type:"existingfile" short:"c" long:"config" help:"Path to the task config file to use for CLI requests"`
+	BaseDir      string `required:"" default:"." type:"existingdir" short:"d" long:"base-dir" help:"Base directory to use for relative paths"`
+	Script       string `arg:"" default:"script.js" help:"Script to run"`
+	NoFollowLogs bool   `default:"false" long:"no-follow-logs" help:"Do not follow logs"`
 }
 
 func (c *CLIRun) Run() error {
@@ -53,6 +54,7 @@ func (c *CLIRun) Run() error {
 		taskConfig,
 		baseDir,
 		c.Script,
+		task.WithFollowLogs(!c.NoFollowLogs),
 	); err != nil {
 		return err
 	}
