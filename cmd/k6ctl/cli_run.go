@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"os"
+	"os/signal"
 	"path/filepath"
 
 	"github.com/Azure/k6ctl/internal/config"
@@ -34,7 +36,7 @@ func (c *CLIRun) Run() error {
 
 	cpRegistry := config.NewRegistry()
 
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
 	stopConfigPlugins, err := task.LoadConfigPlugins(
