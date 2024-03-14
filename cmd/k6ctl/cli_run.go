@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/Azure/k6ctl/internal/config"
+	coreconfig "github.com/Azure/k6ctl/internal/config/core"
 	"github.com/Azure/k6ctl/internal/target"
 	"github.com/Azure/k6ctl/internal/task"
 )
@@ -15,11 +16,12 @@ import (
 const defaultTaskConfigFile = "k6ctl.yaml"
 
 type CLIRun struct {
-	Kubeconfig   string `required:"" type:"existingfile" env:"KUBECONFIG" long:"kubeconfig" help:"Path to the kubeconfig file to use for CLI requests"`
-	TaskConfig   string `type:"existingfile" short:"c" long:"config" help:"Path to the task config file to use for CLI requests"`
-	BaseDir      string `required:"" default:"." type:"existingdir" short:"d" long:"base-dir" help:"Base directory to use for relative paths"`
-	Script       string `arg:"" default:"script.js" help:"Script to run"`
-	NoFollowLogs bool   `default:"false" long:"no-follow-logs" help:"Do not follow logs"`
+	Kubeconfig   string            `required:"" type:"existingfile" env:"KUBECONFIG" long:"kubeconfig" help:"Path to the kubeconfig file to use for CLI requests"`
+	TaskConfig   string            `type:"existingfile" short:"c" long:"config" help:"Path to the task config file to use for CLI requests"`
+	BaseDir      string            `required:"" default:"." type:"existingdir" short:"d" long:"base-dir" help:"Base directory to use for relative paths"`
+	Script       string            `arg:"" default:"script.js" help:"Script to run"`
+	NoFollowLogs bool              `default:"false" long:"no-follow-logs" help:"Do not follow logs"`
+	Parameters   map[string]string `short:"p" long:"parameter" help:"Parameters to pass to the script (can be used multiple times)"`
 }
 
 func (c *CLIRun) resolveTaskConfig(baseDir string, taskConfigFile string) (*task.Schema, error) {
@@ -55,6 +57,14 @@ func (c *CLIRun) Run() error {
 	}
 
 	cpRegistry := config.NewRegistry()
+
+	if err := coreconfig.RegisterProviders(
+		cpRegistry,
+		taskConfig.Configs,
+		c.Parameters,
+	); err != nil {
+		return err
+	}
 
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()

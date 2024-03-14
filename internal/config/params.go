@@ -52,7 +52,7 @@ func LoadForStruct[T any](
 	if err != nil {
 		return withErr[T](err)
 	}
-	err = defaultValidator.Struct(rv)
+	err = DefaultValidator.Struct(rv)
 	if err != nil {
 		return withErr[T](err)
 	}

@@ -13,3 +13,8 @@ configs:
     params:
       message: "k6ctl"
   env: MESSAGE
+- provider:
+    name: parameter
+    params:
+      name: "level"
+  env: LEVEL
