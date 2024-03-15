@@ -53,8 +53,8 @@ func (tr *taskRunner) buildJobObject() (*k8sbatchv1.Job, error) {
 		},
 		Spec: k8sbatchv1.JobSpec{
 			TTLSecondsAfterFinished: stdlib.Ptr[int32](100),
-			Parallelism:             stdlib.Ptr[int32](1), // TODO: configurable
-			Completions:             stdlib.Ptr[int32](1), // TODO: configurable
+			Parallelism:             stdlib.Ptr[int32](tr.instances), // TODO: configurable
+			Completions:             stdlib.Ptr[int32](tr.instances), // TODO: configurable
 			ManualSelector:          stdlib.Ptr(true),
 			Selector: &k8smetav1.LabelSelector{
 				MatchLabels: map[string]string{
