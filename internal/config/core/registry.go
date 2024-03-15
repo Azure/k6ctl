@@ -12,11 +12,11 @@ func RegisterProviders(
 	userParameterInputs map[string]string,
 ) error {
 	// "parameter" config provider
-	resolvedParameters, err := resolveParameters(configProviders, userParameterInputs)
+	p, err := resolveParameters(configProviders, userParameterInputs)
 	if err != nil {
 		return err
 	}
-	registry.Register(resolvedParameters.CreateProvider())
+	registry.Register(p.CreateProvider())
 
 	return nil
 }

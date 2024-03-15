@@ -97,8 +97,8 @@ func promptForParameter(
 func resolveParameters(
 	configProviders []task.ConfigProvider,
 	inputsFromUserInputs map[string]string,
-) (ResolvedParameters, error) {
-	rv := make(ResolvedParameters)
+) (resolvedParameters, error) {
+	rv := make(resolvedParameters)
 	for k, v := range inputsFromUserInputs {
 		rv[k] = v
 	}
@@ -154,9 +154,9 @@ func resolveParameters(
 	return rv, nil
 }
 
-type ResolvedParameters map[string]string
+type resolvedParameters map[string]string
 
-func (p ResolvedParameters) CreateProvider() config.Provider {
+func (p resolvedParameters) CreateProvider() config.Provider {
 	return config.Provide(
 		configProviderNameParameter,
 		config.LoadForStruct[parameterSettings],
