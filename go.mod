@@ -3,7 +3,7 @@ module github.com/Azure/k6ctl
 go 1.21.3
 
 require (
-	github.com/alecthomas/kong v0.8.1
+	github.com/alecthomas/kong v0.9.0
 	github.com/charmbracelet/huh v0.3.0
 	github.com/go-playground/validator/v10 v10.19.0
 	github.com/goccy/go-yaml v1.11.3
