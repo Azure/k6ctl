@@ -3,6 +3,9 @@ package task
 import "github.com/Azure/k6ctl/internal/kubelib"
 
 type runTaskOption struct {
+	// Instances specifies the number of instances to run.
+	// Defaults to 1.
+	Instances int32
 	// FollowLogs specifies whether to follow the logs of the task.
 	FollowLogs bool
 	// KubeClientFactory provides the kubernetes client to use for the task.
@@ -13,6 +16,7 @@ type runTaskOption struct {
 
 func defaultRunTaskOption() *runTaskOption {
 	return &runTaskOption{
+		Instances:         1,
 		FollowLogs:        true,
 		KubeClientFactory: kubelib.CreateKubeClientFromKubeConfig,
 	}
@@ -33,6 +37,14 @@ func (f applyRunTaskOptionFunc) apply(option *runTaskOption) error {
 func WithFollowLogs(followLogs bool) RunTaskOption {
 	return applyRunTaskOptionFunc(func(option *runTaskOption) error {
 		option.FollowLogs = followLogs
+		return nil
+	})
+}
+
+// WithInstances specifies the number of instances to run.
+func WithInstances(replicas int32) RunTaskOption {
+	return applyRunTaskOptionFunc(func(option *runTaskOption) error {
+		option.Instances = replicas
 		return nil
 	})
 }

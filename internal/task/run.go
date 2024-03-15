@@ -50,6 +50,7 @@ func RunTask(
 	tr := &taskRunner{
 		target:                  target,
 		kubeClient:              kubeClient,
+		instances:               opt.Instances,
 		followLogs:              opt.FollowLogs,
 		getConfigProviderByName: getConfigProviderByName,
 		taskConfig:              taskConfig,
@@ -64,6 +65,7 @@ type taskRunner struct {
 	target     target.Target
 	kubeClient kubernetes.Interface
 	followLogs bool
+	instances  int32
 
 	getConfigProviderByName config.GetConfigProviderByName
 	taskConfig              *Schema

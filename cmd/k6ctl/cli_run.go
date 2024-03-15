@@ -22,6 +22,7 @@ type CLIRun struct {
 	Script       string            `arg:"" default:"script.js" help:"Script to run"`
 	NoFollowLogs bool              `default:"false" long:"no-follow-logs" help:"Do not follow logs"`
 	Parameters   map[string]string `short:"p" long:"parameter" help:"Parameters to pass to the script (can be used multiple times)"`
+	Instances    int32             `default:"1" long:"instances" help:"Number of instances to run"`
 }
 
 func (c *CLIRun) resolveTaskConfig(baseDir string, taskConfigFile string) (*task.Schema, error) {
@@ -87,6 +88,7 @@ func (c *CLIRun) Run() error {
 		baseDir,
 		c.Script,
 		task.WithFollowLogs(!c.NoFollowLogs),
+		task.WithInstances(c.Instances),
 	); err != nil {
 		return err
 	}
