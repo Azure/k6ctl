@@ -129,7 +129,8 @@ func (f *logsFollower) discoverPods(ctx context.Context) {
 		return true
 	}
 
-	err := func() error {
+	// TODO: log error
+	_ = func() error {
 		podsClient := f.client.CoreV1().Pods(f.namespace)
 
 		watch, err := podsClient.Watch(ctx, k8smetav1.ListOptions{
@@ -176,10 +177,6 @@ func (f *logsFollower) discoverPods(ctx context.Context) {
 
 		}
 	}()
-
-	if err != nil {
-		// TODO: log error
-	}
 }
 
 func (f *logsFollower) followPodLogs(ctx context.Context) {
@@ -190,9 +187,8 @@ func (f *logsFollower) followPodLogs(ctx context.Context) {
 		case <-ctx.Done():
 			return
 		case p := <-f.podLogsChan:
-			if err := f.followPodLog(ctx, p); err != nil {
-				// TODO: log error
-			}
+			// TODO: log error
+			_ = f.followPodLog(ctx, p)
 		}
 	}
 }

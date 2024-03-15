@@ -8,6 +8,8 @@
 *.so
 *.dylib
 
+.DS_Store
+
 # IDE configurations
 .idea
 .vscode

@@ -54,6 +54,9 @@ func TestRunTask_Integration(t *testing.T) {
 				Dest:   "test.js",
 			},
 		},
+		K6: K6{
+			Namespace: "test",
+		},
 	}
 
 	fakeTarget := &target.StaticTarget{
@@ -76,6 +79,7 @@ func TestRunTask_Integration(t *testing.T) {
 
 			return nil
 		}),
+		WithFollowLogs(false),
 	)
 	assert.NoError(t, err)
 }

@@ -41,10 +41,13 @@ func LoadConfigPlugins(
 			}
 		}
 
+		// shallow copy the args to avoid unexpected mutation
+		args := make([]string, len(plugin.Args))
+		copy(args, plugin.Args)
 		settings := configplugin.ClientBinarySettings{
 			Namespace: plugin.Namespace,
 			Path:      binaryPath,
-			Args:      plugin.Args[:],
+			Args:      args,
 		}
 
 		settingsList = append(settingsList, settings)

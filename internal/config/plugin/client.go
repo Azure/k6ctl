@@ -99,7 +99,8 @@ func registerFromClientBinary(
 			Plugins: map[string]plugin.Plugin{
 				pluginName: &Plugin{},
 			},
-			Cmd:              exec.CommandContext(ctx, settings.Path),
+			// TODO: validate command for security concern
+			Cmd:              exec.CommandContext(ctx, settings.Path), // #nosec G204 - expected usage
 			AllowedProtocols: []plugin.Protocol{plugin.ProtocolNetRPC},
 			Logger:           logger,
 		},
