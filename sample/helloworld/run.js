@@ -13,10 +13,12 @@ export const options = {
 };
 
 const message = __ENV.MESSAGE;
+const level = __ENV.LEVEL;
 
 export default function () {
   const url = new URL('https://k6.io');
   url.searchParams.append('message', message);
+  url.searchParams.append('level', level);
 
   console.log(`requesting ${url.toString()}`);
   http.get(url.toString());
