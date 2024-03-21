@@ -18,7 +18,7 @@ deploying the operator.
 To address these challenges, we developed k6ctl based on the following principles:
 
 - **Composite with External Plugins**: To allow extending the functionality without paying the cost of rebuilding everything,
-`k6ctl` leverages [`hashicorp/go-plugin`][hashcorp/go-plugin] for loading configurations from plugin binaries at runtime.
+`k6ctl` leverages [`hashicorp/go-plugin`][hashicorp/go-plugin] for loading configurations from plugin binaries at runtime.
 This design enables users to implement application-side logic and integrate it into the test script via environment variables.
 - **Client-Side Only**: `k6ctl` assumes each test run can be isolated in pod level, and that the orchestration can be pre-calculated on the client side.
 For instance, test loads can be scaled up by increasing the replicas and scheduled to different nodes by setting pod anti-affinity overrides.
