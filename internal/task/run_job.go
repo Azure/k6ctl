@@ -66,9 +66,6 @@ func (tr *taskRunner) buildJobObject() (*k8sbatchv1.Job, error) {
 					Labels: map[string]string{
 						labelKeyTaskName: taskName,
 					},
-					Annotations: map[string]string{
-						"linkerd.io/inject": "enabled",
-					},
 				},
 				Spec: k8scorev1.PodSpec{
 					Containers: []k8scorev1.Container{
