@@ -5,7 +5,7 @@ go 1.21.3
 require (
 	github.com/alecthomas/kong v0.9.0
 	github.com/charmbracelet/huh v0.3.0
-	github.com/go-playground/validator/v10 v10.19.0
+	github.com/go-playground/validator/v10 v10.22.0
 	github.com/goccy/go-yaml v1.11.3
 	github.com/hashicorp/go-hclog v1.6.2
 	github.com/hashicorp/go-plugin v1.6.0
