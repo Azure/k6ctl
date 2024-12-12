@@ -7,7 +7,7 @@ require (
 	github.com/charmbracelet/huh v0.3.0
 	github.com/go-playground/validator/v10 v10.19.0
 	github.com/goccy/go-yaml v1.11.3
-	github.com/hashicorp/go-hclog v1.6.2
+	github.com/hashicorp/go-hclog v1.6.3
 	github.com/hashicorp/go-plugin v1.6.0
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/sourcegraph/conc v0.3.0
